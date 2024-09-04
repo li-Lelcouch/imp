@@ -9,13 +9,13 @@ export IMP_SILIENT_OTHERS=true
 # if not use all GPUs 
 # deepspeed --include localhost:0,1,2,3 --master_port 29600
 
-deepspeed imp_llava/train/train_mem.py \
+deepspeed --include localhost:0 --master_port 29600 imp_llava/train/train_mem.py \
     --deepspeed ./scripts/zero2.json \
-    --model_name_or_path checkpoints/base/phi-2 \
+    --model_name_or_path ../autodl-tmp/datasets/base/phi-2 \
     --version plain \
-    --data_path datasets/blip_laion_cc_sbu_558k.json \
-    --image_folder datasets/pretrain_images/ \
-    --vision_tower checkpoints/base/siglip-so400m-patch14-384 \
+    --data_path ../autodl-tmp/datasets/blip_laion_cc_sbu_558k.json \
+    --image_folder ../autodl-tmp/datasets/pretrain_images/ \
+    --vision_tower ../autodl-tmp/datasets/base/siglip-so400m-patch14-384 \
     --mm_projector_type mlp2x_gelu \
     --tune_mm_mlp_adapter True \
     --mm_vision_select_layer -2 \
@@ -25,7 +25,7 @@ deepspeed imp_llava/train/train_mem.py \
     --fp16 True \
     --output_dir ./checkpoints/imp-v1-3b-stage1 \
     --num_train_epochs 1 \
-    --per_device_train_batch_size 32 \
+    --per_device_train_batch_size 16 \
     --per_device_eval_batch_size 4 \
     --gradient_accumulation_steps 1 \
     --evaluation_strategy "no" \
